@@ -254,6 +254,11 @@ class auth_plugin_saml2 extends auth_plugin_base {
                 if (!empty($mapconfig->{'field_map_'.$field})) {
                     $attr = $mapconfig->{'field_map_'.$field};
                     $updateonlogin = $mapconfig->{'field_updatelocal_'.$field} === 'onlogin';
+                    // If the atrribute value is null we must set this to a no value string
+                    // otherwise user creation will fail.
+                    if(is_null($attributes[$attr][0])) {
+                        $attributes[$attr][0] = '';
+                    }
 
                     if ($newuser || $updateonlogin) {
                         $user->$field = $attributes[$attr][0];
